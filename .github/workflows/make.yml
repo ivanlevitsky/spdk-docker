@@ -1,0 +1,30 @@
+name: make
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+env:
+  RELEASE_VERSION: "0.1"
+  BUILD_NUMBER: ${GITHUB_RUN_NUMBER}
+  FIO_VERSION: "3.26"
+  LIBURING_VERSION: "2.0"
+  SPDK_VERSION: "21.04"
+  ARCH: "native"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build SPDK docker image
+        run: make build
+
+      - name: Run SPDK unit-tests
+        run: make test
