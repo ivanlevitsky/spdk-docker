@@ -27,17 +27,15 @@ RUN apt-get update && apt-get install -y apt-utils sudo lcov && \
     ###
     cd /app/spdk && git checkout tags/v${SPDK_VERSION} && \
     ###
-    git submodule update --init && /app/spdk/scripts/pkgdep.sh --all && \
-    ###
     cd /app/fio && git checkout tags/fio-${FIO_VERSION} && \
     ###
     cd /app/liburing && git checkout tags/liburing-${LIBURING_VERSION}
 
 RUN cd /app/liburing/ && ./configure && make && make install && \
     ###
-    cd /app/fio/ && ./configure && make && \
+    cd /app/fio/ && ./configure && make && make install && \
     ###
-    cd /app/spdk/ && \
+    cd /app/spdk && git submodule update --init && /app/spdk/scripts/pkgdep.sh --all && \
     ###
     ./configure --enable-coverage \
     --with-isal --with-rdma --with-iscsi-initiator \
